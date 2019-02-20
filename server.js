@@ -8,7 +8,7 @@ const STORAGE_FILENAME = 'store.json';
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-function readData() {
+function getData() {
     try {
         const file = fs.readFileSync(STORAGE_FILENAME);
         return JSON.parse(file);
@@ -17,26 +17,37 @@ function readData() {
     }
 }
 
-function saveNewData(newData) {
-    const data = readData();
-    const mergedData = { ...data, ...newData };
+function saveData(data) {
     fs.writeFileSync(
         STORAGE_FILENAME,
-        JSON.stringify(mergedData),
+        JSON.stringify(data),
         { encoding: 'utf8' },
     );
 }
 
+function saveNewData(newData) {
+    const data = getData();
+    const mergedData = { ...data, ...newData };
+    saveData(mergedData);
+}
+
 app.post('/', (req, res) => {
     const { body } = req;
-
     saveNewData(body);
     res.send();
 });
 
 app.get('/', (req, res) => {
-    const data = readData();
+    const data = getData();
     res.send(JSON.stringify(data));
+});
+
+app.delete('/:key', (req, res) => {
+    const { key } = req.params;
+    const data = getData();
+    delete data[key];
+    saveData(data);
+    res.send();
 });
 
 app.listen(PORT, () => (
