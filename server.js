@@ -42,10 +42,9 @@ app.get('/', (req, res) => {
     res.send(JSON.stringify(data));
 });
 
-app.get('/:key/:value', (req, res) => {
-    const { key, value } = req.params;
-    saveNewData({ [key]: value });
-    const data = getData();
+app.get('/post', (req, res) => {
+    const { query } = req;
+    saveNewData(query);
     res.send();
 });
 
