@@ -42,6 +42,13 @@ app.get('/', (req, res) => {
     res.send(JSON.stringify(data));
 });
 
+app.get('/:key/:value', (req, res) => {
+    const { key, value } = req.params;
+    saveNewData({ [key]: value });
+    const data = getData();
+    res.send();
+});
+
 app.delete('/:key', (req, res) => {
     const { key } = req.params;
     const data = getData();
