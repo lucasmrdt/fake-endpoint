@@ -35,10 +35,8 @@ app.post('/', (req, res) => {
 });
 
 app.get('/', (req, res) => {
-    const { query } = req;
-
-    saveNewData(query);
-    res.send();
+    const data = readData();
+    res.send(JSON.stringify(data));
 });
 
 app.listen(PORT, () => (
